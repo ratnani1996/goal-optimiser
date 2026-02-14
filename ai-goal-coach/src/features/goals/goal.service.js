@@ -1,4 +1,5 @@
 import { openai } from '../../lib/openai.js';
+import { logger } from '../../lib/logger.js';
 import { RefinedGoalSchema } from './goal.schema.js';
 
 export const refineGoal = async (input) => {
@@ -18,6 +19,9 @@ You must return a valid JSON object matching the following schema:
 }
 `;
 
+
+    const startTime = Date.now();
+
     try {
         const completion = await openai.chat.completions.create({
             model: "gpt-5-nano",
@@ -26,8 +30,20 @@ You must return a valid JSON object matching the following schema:
                 { role: "user", content: input },
             ],
             response_format: { type: "json_object" },
-            temperature: 1
         });
+
+        const duration = Date.now() - startTime;
+
+        // Telemetry Logging
+        const logEntry = {
+            timestamp: new Date().toISOString(),
+            model: "gpt-5-nano",
+            input: { systemPrompt, userPrompt: input },
+            output: completion.choices[0].message.content,
+            usage: completion.usage,
+            latency_ms: duration
+        };
+        logger.logAI(logEntry);
 
         const content = completion.choices[0].message.content;
         if (!content) {
