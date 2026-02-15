@@ -1,4 +1,4 @@
 .vscode
-ai-goal-coach/node_modules
+ai-goal-coach/node_modules/
 ai-goal-coach/.env
 ai-goal-coach/logs/
