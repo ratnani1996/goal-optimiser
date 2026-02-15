@@ -13,28 +13,6 @@ The repository is organized into two main directories:
 
 The application follows a client-server architecture where the React frontend communicates with the Express backend via a proxy. The backend processes requests and leverages OpenAI's API to generate goal refinements.
 
-```mermaid
-graph TD
-    Client[React Client (Vite)]
-    Proxy[Vite Proxy]
-    Server[Express Server]
-    Controller[Goal Controller]
-    Service[Goal Service]
-    OpenAI[OpenAI API]
-
-    Client -- "HTTP POST /api/goals/refine" --> Proxy
-    Proxy -- "Forward Request" --> Server
-    Server -- "Route Request" --> Controller
-    Controller -- "Validate Input (Zod)" --> Controller
-    Controller -- "Call Service" --> Service
-    Service -- "Generate Completion" --> OpenAI
-    OpenAI -- "JSON Response" --> Service
-    Service -- "Refined Goal Data" --> Controller
-    Controller -- "JSON Response" --> Server
-    Server -- "Response to Client" --> Proxy
-    Proxy -- "Response to Client" --> Client
-```
-
 ## Prerequisites
 
 Before running the application, ensure you have the following installed:
